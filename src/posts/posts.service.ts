@@ -42,11 +42,45 @@ export class PostsService {
     return this.postRepository.remove(post);
   }  
   
-  async findAll(limit: number, offset: number): Promise<Post[]> {
+  async findAll(
+    limit: number, 
+    offset: number, 
+    search?: string,
+    userId?: number,
+    withUserData?: boolean,
+): Promise<Post[]> {
     const queryBuilder = this.postRepository.createQueryBuilder('posts');
-        // posts in this case is an alias that you assign to the table you're querying and used to reference the table in different parts of the query
+            // posts in this case is an alias that you assign to the table you're querying and used to reference the table in different parts of the query
+
+    if (withUserData) {
+        queryBuilder.leftJoinAndSelect("posts.user", "user");
+        // left join is used to combine rows from two tables based on a related column and says that all rows from left table will be returned, even if there's no match in the right table (in this case all posts will be included even if no user)
+    }
+
+    let hasWhereCondition = false;
+
+    if (search !== undefined) {
+        queryBuilder.where('posts.content ILIKE :search', {
+          search: `%${search}%`,
+          // % symbols are used as wildcard characters to match any characters before and after the search query
+        });
+        hasWhereCondition = true;
+    }
+
+    if (userId !== undefined) {
+        if (hasWhereCondition) {
+          queryBuilder.andWhere('posts.userId = :userId', { userId });
+        } else {
+          queryBuilder.where('posts.userId = :userId', { userId });
+          hasWhereCondition = true;
+        }
+    }
+      
     queryBuilder.limit(limit);
     queryBuilder.offset(offset);
+
+    queryBuilder.orderBy('posts.timestamp', 'DESC'); 
+
     return await queryBuilder.getMany();
   }
   
