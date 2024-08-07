@@ -20,7 +20,9 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() userDto: UserLoginDTO): Promise<{access_token: string;}> {
+  async login(
+    @Body() userDto: UserLoginDTO,
+  ): Promise<{ access_token: string }> {
     const user = await this.authService.validateUser(
       userDto.username,
       userDto.password,
@@ -30,5 +32,4 @@ export class UserController {
     }
     return this.authService.login(user);
   }
-
 }

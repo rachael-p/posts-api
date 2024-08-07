@@ -24,8 +24,6 @@ export class UserService {
     });
     return this.userRepository.save(user);
   }
-  
-  
 
   // You can add more methods as required, like createUser, updateUser, etc.
 }

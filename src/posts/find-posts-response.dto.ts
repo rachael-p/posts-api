@@ -1,4 +1,4 @@
-import { PostResponseDTO } from "./post-response.dto";
+import { PostResponseDTO } from './post-response.dto';
 
 export class FindPostsResponseDTO {
   limit: number;

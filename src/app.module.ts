@@ -13,6 +13,7 @@ import { UserController } from './user/user.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PostsModule } from './posts/posts.module';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
       inject: [ConfigService],
     }),
     PostsModule,
+    CommentsModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, AuthService, LocalStrategy, UserService, JwtStrategy],

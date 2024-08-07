@@ -1,3 +1,4 @@
+import { Post } from 'src/posts/post.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
@@ -5,13 +6,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Comment } from 'src/comments/comment.entity';
 
 @Entity()
-export class Post {
+export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -21,15 +20,6 @@ export class Post {
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
 
-  @Column({ nullable: true })
-  image: string;
-
-  @Column({ default: 0 })
-  likeCount: number;
-
-  @Column({ default: 0 })
-  commentCount: number;
-
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'userId' })
   user: User;
@@ -37,6 +27,10 @@ export class Post {
   @Column()
   userId: number;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
+  @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn({ name: 'postId' })
+  post: Post;
+
+  @Column()
+  postId: string;
 }
