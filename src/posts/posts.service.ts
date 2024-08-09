@@ -20,9 +20,19 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async findOne(id: string): Promise<Post | null> {
-    return this.postRepository.findOneBy({ id });
+  async findOne(id: string, withUserData?: boolean): Promise<Post | null> {
+    const relations = [];
+  
+    if (withUserData) {
+      relations.push("user");
+    }
+  
+    return this.postRepository.findOne({
+      where: { id },
+      relations,
+    });
   }
+  
 
   async update(id: string, updatePostDto: UpdatePostDto): Promise<Post | null> {
     const post = await this.postRepository.preload({ id, ...updatePostDto });
