@@ -68,22 +68,22 @@ export class PostsController {
     };
   }
 
-  @Get(":id")
+  @Get(':id')
   async findOne(
-    @Param("id") id: string,
-    @Query("withUserData") withUserData?: boolean,
+    @Param('id') id: string,
+    @Query('withUserData') withUserData?: boolean,
   ): Promise<PostResponseDTO> {
     const post = await this.postsService.findOne(id, withUserData);
     if (!post) {
       throw new NotFoundException(`Post with ID ${id} not found`);
     }
-  
+
     delete post.userId;
     if (withUserData) {
       delete post.user.password;
     }
     return post;
-  }  
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()

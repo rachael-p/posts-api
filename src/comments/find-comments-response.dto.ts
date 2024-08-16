@@ -1,4 +1,4 @@
-import { CommentResponseDTO } from "./comment-response.dto";
+import { CommentResponseDTO } from './comment-response.dto';
 
 export class FindCommentsResponseDTO {
   limit: number;

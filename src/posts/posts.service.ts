@@ -22,17 +22,16 @@ export class PostsService {
 
   async findOne(id: string, withUserData?: boolean): Promise<Post | null> {
     const relations = [];
-  
+
     if (withUserData) {
-      relations.push("user");
+      relations.push('user');
     }
-  
+
     return this.postRepository.findOne({
       where: { id },
       relations,
     });
   }
-  
 
   async update(id: string, updatePostDto: UpdatePostDto): Promise<Post | null> {
     const post = await this.postRepository.preload({ id, ...updatePostDto });
@@ -94,13 +93,12 @@ export class PostsService {
     return await queryBuilder.getMany();
   }
 
-
   async incrementCommentCounter(id: string): Promise<Post | null> {
     const post = await this.findOne(id);
     if (!post) {
       return null;
     }
-  
+
     post.commentCount += 1;
     await this.postRepository.save(post);
     return post;
